@@ -1,0 +1,32 @@
+version: '3'
+services:
+  beanstalk:
+    image: schickling/beanstalkd
+    ports:
+    - "11300:11300"
+  http-server:
+    build:
+      context: ./http-server
+    ports:
+    - "8081:8080"
+    depends_on:
+    - beanstalk
+  cassandra:
+    image: scylladb/scylla
+    ports:
+    - "9160:9160"
+  kairosdb:
+    build:
+      context: ./kairosdb
+    ports:
+    - "8080:8080"
+    depends_on:
+    - cassandra
+    - beanstalk
+  grafana:
+    build:
+      context: ./grafana
+    ports:
+    - "3000:3000"
+    depends_on:
+    - kairosdb

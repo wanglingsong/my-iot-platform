@@ -1,0 +1,4 @@
+.idea
+http-server/node_modules/
+kairosdb/kairos-beanstalk/target
+*.iml
