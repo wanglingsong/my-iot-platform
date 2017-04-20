@@ -12,7 +12,7 @@ services:
     depends_on:
     - beanstalk
   cassandra:
-    image: scylladb/scylla
+    image: scylladb/scylla:1.6.3
     ports:
     - "9160:9160"
   kairosdb:

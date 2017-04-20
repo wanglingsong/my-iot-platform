@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * Created by Wang on 2017/4/15.
  */
-public class QueueMessage {
+public class Metric {
 
     private String metricName;
 
@@ -13,11 +13,11 @@ public class QueueMessage {
 
     private long[] timestamp;
 
-    private double[] doubleData;
+    private double[] doubles;
 
-    private long[] longData;
+    private long[] longs;
 
-    private String[] stringData;
+    private String[] strings;
 
     public String getMetricName() {
         return metricName;
@@ -43,28 +43,28 @@ public class QueueMessage {
         this.timestamp = timestamp;
     }
 
-    public double[] getDoubleData() {
-        return doubleData;
+    public double[] getDoubles() {
+        return doubles;
     }
 
-    public void setDoubleData(double[] doubleData) {
-        this.doubleData = doubleData;
+    public void setDoubles(double[] doubles) {
+        this.doubles = doubles;
     }
 
-    public long[] getLongData() {
-        return longData;
+    public long[] getLongs() {
+        return longs;
     }
 
-    public void setLongData(long[] longData) {
-        this.longData = longData;
+    public void setLongs(long[] longs) {
+        this.longs = longs;
     }
 
-    public String[] getStringData() {
-        return stringData;
+    public String[] getStrings() {
+        return strings;
     }
 
-    public void setStringData(String[] stringData) {
-        this.stringData = stringData;
+    public void setStrings(String[] strings) {
+        this.strings = strings;
     }
 
 }

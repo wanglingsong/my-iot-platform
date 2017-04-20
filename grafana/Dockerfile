@@ -1,4 +1,4 @@
-FROM grafana/grafana
+FROM grafana/grafana:4.2.0
 
 ENV GF_PATHS_PLUGINS=/grafana-plugins
 

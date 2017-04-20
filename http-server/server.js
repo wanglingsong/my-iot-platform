@@ -6,12 +6,12 @@ var bodyParser = require('body-parser');
 function startServer(beanstalkCilent, expressApp) {
     expressApp.post('/sensor/', function (req, res) {
         var message = JSON.stringify(req.body);
-        console.info('Received message: ' + message);
+        console.info('Received message: ', message);
         beanstalkCilent.put(0, 0, 10, message, function (err, jobid) {
             if (err) {
-                console.error('error on putting message: ' + err);
+                console.error('error on putting message: ', err);
             } else {
-                console.info(jobid);
+                console.info('jobid: ', jobid);
             }
         });
         res.send('OK');

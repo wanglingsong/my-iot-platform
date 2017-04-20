@@ -33,10 +33,10 @@ public class ConsumerThread implements Runnable {
                 try {
                     Job job = consumer.reserveJob(1000);
                     if (job != null) {
-                        QueueMessage message = JSON.parseObject(job.getData(), QueueMessage.class);
+                        Metric message = JSON.parseObject(job.getData(), Metric.class);
                         ImmutableSortedMap<String, String> tags = ImmutableSortedMap.copyOf(message.getTags());
                         for (int i = 0; i < message.getTimestamp().length; i++) {
-                            DataPoint point = dataPointFactory.createDataPoint(message.getTimestamp()[i], message.getDoubleData()[i]);
+                            DataPoint point = dataPointFactory.createDataPoint(message.getTimestamp()[i], message.getDoubles()[i]);
                             datastore.putDataPoint(message.getMetricName(), tags, point, 0);
                         }
                         consumer.deleteJob(job.getId());
