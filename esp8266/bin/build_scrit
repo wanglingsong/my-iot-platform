@@ -1,0 +1,2 @@
+ rollup -c -i device_livingroom.js -o dist/livingroom.js
+ rollup -c -i device_bedroom.js -o dist/bedroom.js

@@ -1,0 +1,17 @@
+{
+  "name": "esp8266",
+  "version": "1.0.0",
+  "description": "",
+  "main": "myhome_bedroom.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "rollup": "0.41.6",
+    "rollup-plugin-commonjs": "8.0.2",
+    "rollup-plugin-json": "2.1.1"
+  }
+}
