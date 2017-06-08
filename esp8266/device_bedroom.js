@@ -17,7 +17,7 @@ E.on('init', function () {
 		client_id: DEVICE_ID
 	});
 
-	initDht11(D5, client, "home/bedroom/sensor/" + DEVICE_ID + "_dht11");
+	initDht11(D5, client, DEVICE_ID + "_dht11");
 
 	// let client = createCilent({
 	// 	client_id: '6693093',

@@ -20,8 +20,8 @@ E.on('init', function () {
 		client_id: DEVICE_ID
 	});
 
-	initDht11(D5, client, "home/livingroom/sensor/" + DEVICE_ID + "_dht11");
-	initHCSR501(D12, client, "home/livingroom/sensor/" + DEVICE_ID + "_hcsr501");
+	initDht11(D5, client, DEVICE_ID + "_dht11");
+	initHCSR501(D12, client, DEVICE_ID + "_hcsr501");
 
 	startWifi(client, config.wifi.ssid, config.wifi.password);
 
