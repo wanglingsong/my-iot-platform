@@ -1,4 +1,4 @@
-function MqttTarget(mqttTransport, options, watcher) {
+function MqttTarget(options, watcher, mqttTransport) {
     this.mqtt = mqttTransport.createClient(options.mqtt);
     this.topic = options.topic;
     var p = this;
