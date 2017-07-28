@@ -1,27 +1,28 @@
-export class HCSR501Source {
+function HCSR501Source(options, watcher) {
+	this.pin = options.pin;
+	this.watchId = null;
+	watcher.sourceReady();
+}
 
-	constructor(pin) {
-		this.dht = require('DHT11').connect(pin);
+HCSR501Source.prototype.startReading(callback) {
+	if (this.watchId === null) {
+		this.watchId = setWatch(function(e) {
+			//console.log("Movement detected: " + e.state + " at " + e.time);
+			callback(e.state);
+		}, this.pin, {
+			repeat: true,
+			edge: "both"
+		});
+	}
+}
+
+HCSR501Source.prototype.stop() {
+	if (this.watchId !== null) {
+		clearWatch(this.intervalId);
 		this.watchId = null;
 	}
+}
 
-	startReading(callback) {
-		if (this.watchId === null) {
-			this.watchId = setWatch(function (e) {
-				//console.log("Movement detected: " + e.state + " at " + e.time);
-				callback(e.state);
-			}, pin, {
-				repeat: true,
-				edge: "both"
-			});
-		}
-	}
-
-	stopReading() {
-		if (this.watchId !== null) {
-			clearWatch(this.intervalId);
-			this.watchId = null;
-		}
-	}
-
+exports.createSource = function(options, watcher， transport) {
+	return new HCSR501Source(options, watcher);
 }

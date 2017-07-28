@@ -1,56 +1,71 @@
-import config from './linkConfig.json';
-import {
-	MqttTransport
-} from './mqttTransport.js';
-import {
-	Dht11Source
-} from './dht11Source.js';
-import {
-	MqttTarget
-} from './mqttTarget.js';
-import {
-	Link
-} from './link.js';
+require('mqttTransport');
+require('dht11Source');
+require('MqttTarget');
 
-const classes = {
-	Dht11Source,
-	MqttTarget,
-	MqttTransport
+var config = {
+	"network": {
+		"ssid": "Xiaomi_5576",
+		"password": ""
+	},
+	"transports": {
+		"mqtt": {
+			"module": "mqttTransport",
+			"options": {
+				"host": "test",
+				"port": 3781
+			}
+		}
+	},
+	"links": [{
+		"source": {
+			"module": "dht11Source",
+			"options": {
+				"pin": 5
+			}
+		},
+		"destination": {
+			"module": "MqttTarget",
+			"transport": "mqtt",
+			"options": {
+				"topic": "foo",
+				"mqtt": {}
+			}
+		}
+	}]
 };
 
 function setupTransport(transportsConfig) {
 	let transports = {};
 	for (var prop in transportsConfig) {
-		transports[prop] = new classes[transportsConfig[prop].class](transportsConfig[prop].options);
+		transports[prop] = require(transportsConfig[prop].module).createTransport(transportsConfig[prop].options);
 	}
 	return transports;
 }
 
 function setupLinks(transports, linksConfig) {
-	var source, target, formatter;
-	linksConfig.forEach(function (config) {
-		source = createEndpoint(transports, config.source);
-		target = createEndpoint(transports, config.target);
-		formatter = createFormatter(config.formatter);
-		new Link(source, target, formatter);
+	var source, destination, W = require('watcher');
+	linksConfig.forEach(function(config) {
+		let watcher = W.createWatcher();
+		source = createSource(transports, config.source, watcher);
+		destination = createTarget(transports, config.destination, watcher);
 	});
 }
 
-function createEndpoint(transports, config) {
-	return new classes[config.class](transports[config.transport], config.options);
+function createSource(transports, config, watcher) {
+	return require(config.module).createSource(config.options, watcher, (config.transport ? transports[config.transport] : null));
 }
 
-function createFormatter(formatterConfig) {
-	return null;
+function createTarget(transports, config, watcher) {
+	return require(config.module).createTarget(config.options, watcher, (config.transport ? transports[config.transport] : null));
 }
 
-E.on('init', function () {
+E.on('init', function() {
 
 	let transports = setupTransport(config.transports);
 	setupLinks(transports, config.links);
 	let wifi = require('Wifi');
 
-	wifi.on('connected', function (details) {
+	wifi.on('connected', function(details) {
 		console.log("connected: detail=", details);
 		for (var prop in transports) {
 			transports[prop].connect(true);
@@ -59,7 +74,7 @@ E.on('init', function () {
 
 	wifi.connect(config.network.ssid, {
 		password: config.network.password
-	}, function (err) {
+	}, function(err) {
 		console.log("connected? err=", err, "info=", wifi.getIP());
 	});
 

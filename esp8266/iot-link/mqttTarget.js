@@ -1,21 +1,22 @@
-export class MqttTarget {
+function MqttTarget(mqttTransport, options, watcher) {
+    this.mqtt = mqttTransport.createClient(options.mqtt);
+    this.topic = options.topic;
+    var p = this;
+    this.mqtt.on('connected', function() {
+        watcher.targetReady(p);
+    });
+    this.mqtt.on('disconnected', function() {
+        watcher.targetReady(null);
+    });
+}
 
-    constructor(mqttTransport, options) {
-        this.mqtt = mqttTransport.createClient(options.mqtt);
-        this.topic = options.topic;
-    }
+MqttTarget.prototype.write = function(data) {
+    //console.log('Publishing data ' + JSON.stringify(data) + ' to topic: ' + this.topic);
+    this.mqtt.publish(this.topic, JSON.stringify(data));
+}
 
-    onConnected(callback) {
-        this.mqtt.on('connected', callback);
-    }
+MqttTarget.prototype.stop = function() {}
 
-    onDisconnected(callback) {
-        this.mqtt.on('disconnected', callback);
-    }
-
-    write(data) {
-        //console.log('Publishing data ' + JSON.stringify(data) + ' to topic: ' + this.topic);
-        this.mqtt.publish(this.topic, JSON.stringify(data));
-    }
-
+exports.createTarget = function(mqttTransport, options, watcher) {
+    return new MqttTarget(mqttTransport, options, watcher);
 }
