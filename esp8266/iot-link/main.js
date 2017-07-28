@@ -1,6 +1,8 @@
+// customized code
+
 require('mqttTransport');
 require('dht11Source');
-require('MqttTarget');
+require('mqttTarget');
 
 var config = {
 	"network": {
@@ -33,6 +35,8 @@ var config = {
 		}
 	}]
 };
+
+// common code
 
 function setupTransport(transportsConfig) {
 	let transports = {};
