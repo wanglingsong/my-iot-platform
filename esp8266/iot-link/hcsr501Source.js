@@ -23,6 +23,6 @@ HCSR501Source.prototype.stop() {
 	}
 }
 
-exports.createSource = function(options, watcher， transport) {
+exports.createSource = function(options, watcher, transport) {
 	return new HCSR501Source(options, watcher);
 }

@@ -32,6 +32,6 @@ Dht11Source.prototype.stop = function() {
 	}
 }
 
-exports.createSource = function(options, watcher，transport) {
+exports.createSource = function(options, watcher, transport) {
 	return new Dht11Source(options, watcher);
 }
