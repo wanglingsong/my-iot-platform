@@ -7,6 +7,7 @@ MqttTransport.prototype.connect = function(connect) {
     this.clientPool.forEach(function(c) {
         if (connect) {
             c.connect();
+            console.log('Try to connect to mqtt');
         } else {
             c.disconnect();
         }
@@ -21,6 +22,7 @@ MqttTransport.prototype.createClient = function(options) {
     if (mqttOpt.dedicatedClient || this.clientPool.length === 0) {
         var mqtt = createMqttCilent(mqttOpt);
         this.clientPool.push(mqtt);
+        console.log('mqtt client created with options: ' + JSON.stringify(mqttOpt));
         return mqtt;
     } else {
         return this.clientPool[0];

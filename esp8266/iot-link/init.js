@@ -1,5 +1,5 @@
 function setupTransport(transportsConfig) {
-	let transports = {};
+	var transports = {};
 	for (var prop in transportsConfig) {
 		transports[prop] = require(transportsConfig[prop].module).createTransport(transportsConfig[prop].options);
 	}
@@ -7,26 +7,26 @@ function setupTransport(transportsConfig) {
 }
 
 function setupLinks(transports, linksConfig) {
-	var source, destination, W = require('watcher');
+	var W = require('watcher');
 	linksConfig.forEach(function(config) {
-		let watcher = W.createWatcher();
-		source = createSource(transports, config.source, watcher);
-		destination = createTarget(transports, config.destination, watcher);
+		var watcher = W.createWatcher();
+		createSource(transports, config.source, watcher);
+		createTarget(transports, config.target, watcher);
 	});
 }
 
 function createSource(transports, config, watcher) {
-	return require(config.module).createSource(config.options, watcher, (config.transport ? transports[config.transport] : null));
+	return require(config.module).createSource(config.options, watcher, transports);
 }
 
 function createTarget(transports, config, watcher) {
-	return require(config.module).createTarget(config.options, watcher, (config.transport ? transports[config.transport] : null));
+	return require(config.module).createTarget(config.options, watcher, transports);
 }
 
 exports.initEspruino = function(config) {
-	let transports = setupTransport(config.transports);
+	var transports = setupTransport(config.transports);
 	setupLinks(transports, config.links);
-	let wifi = require('Wifi');
+	var wifi = require('Wifi');
 
 	wifi.on('connected', function(details) {
 		console.log("connected: detail=", details);

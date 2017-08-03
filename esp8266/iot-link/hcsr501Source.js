@@ -1,7 +1,7 @@
 function HCSR501Source(options, watcher) {
 	this.pin = options.pin;
 	this.watchId = null;
-	watcher.sourceReady();
+	watcher.sourceReady(this);
 }
 
 HCSR501Source.prototype.startReading(callback) {
@@ -23,6 +23,6 @@ HCSR501Source.prototype.stop() {
 	}
 }
 
-exports.createSource = function(options, watcher, transport) {
+exports.createSource = function(options, watcher, transports) {
 	return new HCSR501Source(options, watcher);
 }

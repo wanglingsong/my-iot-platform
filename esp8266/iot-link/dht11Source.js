@@ -5,12 +5,13 @@ function Dht11Source(options, watcher) {
 	this.humidityOffset = options.humidityOffset || 0;
 	this.intervalId = null;
 	watcher.sourceReady(this);
+	console.log('DHT11 source created');
 }
 
 Dht11Source.prototype.startReading = function(callback) {
 	if (this.intervalId === null) {
 		var p = this;
-		this.intervalId = setInterval(function() {
+		p.intervalId = setInterval(function() {
 			p.dht.read(function(a) {
 				if (!a.err) {
 					callback({
@@ -21,7 +22,7 @@ Dht11Source.prototype.startReading = function(callback) {
 					console.log("Invalid reading: " + JSON.stringify(a));
 				}
 			});
-		}, this.interval);
+		}, p.interval);
 	}
 }
 
@@ -32,6 +33,6 @@ Dht11Source.prototype.stop = function() {
 	}
 }
 
-exports.createSource = function(options, watcher, transport) {
+exports.createSource = function(options, watcher, transports) {
 	return new Dht11Source(options, watcher);
 }

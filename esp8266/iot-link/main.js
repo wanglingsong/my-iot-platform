@@ -6,15 +6,15 @@ require('mqttTarget');
 
 var config = {
 	"network": {
-		"ssid": "Xiaomi_5576",
+		"ssid": "TP-LINK_7B4CC6",
 		"password": ""
 	},
 	"transports": {
 		"mqtt": {
 			"module": "mqttTransport",
 			"options": {
-				"host": "test",
-				"port": 3781
+				"host": "localhost",
+				"port": 1883
 			}
 		}
 	},
@@ -25,18 +25,20 @@ var config = {
 				"pin": 5
 			}
 		},
-		"destination": {
-			"module": "MqttTarget",
-			"transport": "mqtt",
+		"target": {
+			"module": "mqttTarget",
 			"options": {
 				"topic": "foo",
-				"mqtt": {}
+				"transport": "mqtt",
+				"transportOptions": {}
 			}
 		}
 	}]
 };
 
 // common code
+
+E.setFlags({pretokenise:1});
 
 E.on('init', function() {
 	require('init').initEspruino(config);
