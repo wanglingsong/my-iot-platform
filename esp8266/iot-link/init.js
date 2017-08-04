@@ -7,20 +7,63 @@ function setupTransport(transportsConfig) {
 }
 
 function setupLinks(transports, linksConfig) {
-	var W = require('watcher');
+
+	function link(w) {
+		console.log('linked');
+		w.s.startReading(function(data) {
+			w.t.write(data);
+		});
+	}
+
+	function delink(w) {
+		if (w.s) {
+			w.s.stop();
+		}
+		if (w.t) {
+			w.t.stop();
+		}
+	}
+
 	linksConfig.forEach(function(config) {
-		var watcher = W.createWatcher();
-		createSource(transports, config.source, watcher);
-		createTarget(transports, config.target, watcher);
+		var w = {
+			'r': false
+		};
+
+		w.on('source', function(s) {
+			w.s = s;
+			if (w.s && w.t && !w.r) {
+				w.r = true;
+				link(w);
+			}
+			if (!w.s && w.r) {
+				w.r = false;
+				delink(w);
+			}
+		});
+
+		w.on('target', function(t) {
+			w.t = t;
+			if (w.s && w.t && !w.r) {
+				w.r = true;
+				link(w);
+			}
+			if (!w.t && w.r) {
+				w.r = false;
+				delink(w);
+			}
+		});
+
+		createSource(transports, config.source, w);
+		createTarget(transports, config.target, w);
 	});
 }
 
 function createSource(transports, config, watcher) {
-	return require(config.module).createSource(config.options, watcher, transports);
+	require(config.module).createSource(config.options, watcher, transports);
 }
 
 function createTarget(transports, config, watcher) {
-	return require(config.module).createTarget(config.options, watcher, transports);
+	require(config.module).createTarget(config.options, watcher, transports);
 }
 
 exports.initEspruino = function(config) {

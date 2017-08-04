@@ -1,6 +1,6 @@
 // customized code
 
-require('mqttTransport');
+require('tinyMqttTransport');
 require('dht11Source');
 require('mqttTarget');
 
@@ -11,9 +11,9 @@ var config = {
 	},
 	"transports": {
 		"mqtt": {
-			"module": "mqttTransport",
+			"module": "tinyMqttTransport",
 			"options": {
-				"host": "localhost",
+				"host": "iot.eclipse.org",
 				"port": 1883
 			}
 		}
@@ -30,7 +30,7 @@ var config = {
 			"options": {
 				"topic": "foo",
 				"transport": "mqtt",
-				"transportOptions": {}
+				"transportOptions": null
 			}
 		}
 	}]

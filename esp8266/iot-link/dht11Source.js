@@ -4,7 +4,7 @@ function Dht11Source(options, watcher) {
 	this.temperatureOffset = options.temperatureOffset || 0;
 	this.humidityOffset = options.humidityOffset || 0;
 	this.intervalId = null;
-	watcher.sourceReady(this);
+	watcher.emit('source', this);
 	console.log('DHT11 source created');
 }
 

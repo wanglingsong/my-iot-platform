@@ -4,18 +4,18 @@ function MqttTarget(options, watcher, mqttTransport) {
     var p = this;
     this.mqtt.on('connected', function() {
         console.log('mqtt target ready');
-        watcher.targetReady(p);
+        watcher.emit('target', p);
     });
     this.mqtt.on('disconnected', function() {
         console.log('mqtt target not ready');
-        watcher.targetReady(null);
+        watcher.emit('target', null);
     });
     console.log('MQTT target created');
 }
 
 MqttTarget.prototype.write = function(data) {
     //console.log('Publishing data ' + JSON.stringify(data) + ' to topic: ' + this.topic);
-    this.mqtt.publish(this.topic, JSON.stringify(data));
+    this.mqtt.publish(this.topic, (typeof data === 'object') ? JSON.stringify(data) : data);
 }
 
 MqttTarget.prototype.stop = function() {}

@@ -1,7 +1,7 @@
 function HCSR501Source(options, watcher) {
 	this.pin = options.pin;
 	this.watchId = null;
-	watcher.sourceReady(this);
+	watcher.emit('source', this);
 }
 
 HCSR501Source.prototype.startReading(callback) {
