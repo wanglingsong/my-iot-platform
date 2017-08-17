@@ -2,7 +2,7 @@
 
 require('tinyMqttTransport');
 require('dht11Source');
-require('bh1750Source');
+require('hcsr501Source');
 require('mqttSource');
 require('mqttTarget');
 require('gpioTarget');
@@ -16,8 +16,10 @@ var config = {
         "mqtt": {
             "module": "tinyMqttTransport",
             "options": {
-                "host": "iot.eclipse.org",
-                "port": 1883
+                "host": "mqtt.thingspeak.com",
+                "port": 1883,
+                "dedicatedClient": false,
+                "auto_reconnect": true
             }
         }
     },
@@ -25,7 +27,8 @@ var config = {
         "source": {
             "module": "dht11Source",
             "options": {
-                "pin": 7
+                "pin": 4,
+                "interval": 60000
             }
         },
         "target": {
@@ -41,29 +44,29 @@ var config = {
             "module": "mqttSource",
             "options": {
                 "topic": "switch",
-                "transport": "mqtt"
+                "transport": "mqtt",
+                "transportOptions": null
             }
         },
         "target": {
             "module": "gpioTarget",
             "options": {
-                "pin": 6
+                "pin": 12
             }
         }
     }, {
         "source": {
-            "module": "bh1750Source",
+            "module": "hcsr501Source",
             "options": {
-                "scl": 4,
-                "sda": 5,
-                "address": true
+                "pin": 5
             }
         },
         "target": {
             "module": "mqttTarget",
             "options": {
-                "topic": "bh1750",
+                "topic": "hcsr501",
                 "transport": "mqtt",
+                "transportOptions": null
             }
         }
     }]
@@ -75,6 +78,8 @@ E.setFlags({
     pretokenise: 1
 });
 
+var watchers = null;
+
 E.on('init', function () {
-    require('init').initEspruino(config);
+    watchers = require('init').initEspruino(config);
 });

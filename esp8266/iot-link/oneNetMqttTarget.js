@@ -15,7 +15,13 @@ function MqttTarget(opt, wtc, tspt) {
 
 MqttTarget.prototype.write = function (data) {
     console.log('Publishing data ' + data);
-    this.mqtt.publish(this.topic, data);
+    var length = data.length,
+        buffer = new ArrayBuffer(3),
+        dataView = new DataView(buffer);
+    dataView.setUint8(0, 3); // type 3
+    dataView.setUint16(1, length);
+    var header = String.fromCharCode.apply(null, new Uint8Array(buffer));
+    this.mqtt.publish(this.topic, header + data);
 };
 
 MqttTarget.prototype.stop = function () {};

@@ -1,38 +1,36 @@
-function Dht11Source(options, watcher) {
-    this.dht = require('DHT11').connect(options.pin);
-    this.interval = options.interval || 600000;
-    this.tOffset = options.tOffset || 0;
-    this.hOffset = options.hOffset || 0;
-    this.intervalId = null;
-    watcher.emit('source', this);
-    console.log('DHT11 source created');
+function Dht11Source(opt, wtc) {
+    this.dht = require('DHT11').connect(opt.pin);
+    this.itvl = opt.interval || 600000;
+    this.tofs = opt.tOffset || 0;
+    this.hofs = opt.hOffset || 0;
+    this.iid = null;
+    wtc.emit('source', this);
+    console.log('DHT11 source created with option: ' + JSON.stringify(opt));
 }
 
-Dht11Source.prototype.startReading = function (callback) {
-    if (this.intervalId === null) {
+Dht11Source.prototype.read = function (callback) {
+    if (this.iid === null) {
         var p = this;
-        p.intervalId = setInterval(function () {
+        p.iid = setInterval(function () {
             p.dht.read(function (a) {
+                console.log("Reading: " + JSON.stringify(a));
                 if (!a.err) {
-                    callback({
-                        temp: a.temp + p.tOffset,
-                        rh: a.rh + p.hOffset
-                    });
+                    callback('{"temp":' + (a.temp + p.tofs) + ',"rh":' + (a.rh + p.hofs) + '}');
                 } else {
                     console.log("Invalid reading: " + JSON.stringify(a));
-                }
+                };
             });
-        }, p.interval);
+        }, p.itvl);
     }
 };
 
 Dht11Source.prototype.stop = function () {
-    if (this.intervalId !== null) {
-        clearInterval(this.intervalId);
-        this.intervalId = null;
+    if (this.iid !== null) {
+        clearInterval(this.iid);
+        this.iid = null;
     }
 };
 
-exports.createSource = function (options, watcher) {
-    return new Dht11Source(options, watcher);
+exports.createSource = function (opt, wtc) {
+    return new Dht11Source(opt, wtc);
 };
