@@ -18,7 +18,7 @@ BH1750Source.prototype.read = function (callback) {
         p.iid = setInterval(function () {
             callback({
                 lux: p.bh.read()
-            });
+            }, 'bh1750');
         }, p.itvl);
     }
 };

@@ -9,8 +9,8 @@ function setupTspt(tConfig) {
 function setupLinks(tspt, lnkConfig) {
 
     function link(w) {
-        w.s.read(function (data) {
-            w.t.write(data);
+        w.s.read(function (data, type) {
+            w.t.write(data, type);
         });
         console.log('linked');
     }

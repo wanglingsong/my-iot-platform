@@ -14,24 +14,17 @@ function MqttTarget(opt, wtc, tspt) {
 }
 
 MqttTarget.prototype.write = function (raw, type) {
+    console.log('Publishing data: ' + raw + ' type: ' + type);
+    var p = this.mqtt.publish,
+        t = this.topic;
     if (type === 'dht11') {
-        this.publish('{"temp": ' + raw.temp + ',"rh":' + raw.rh + '}');
+        p(t + '/temp', 'temp,c=' + raw.temp);
+        p(t + '/rh', 'rel_hum,p=' + raw.rh);
     } else if (type === 'hcsr501') {
-        this.publish('{"motion": ' + raw.state + '}');
+        p(t + '/motion', 'digital,d=' + (raw.state ? '1' : '0'));
     } else {
-        this.publish(JSON.stringify(raw));
+        p(t, JSON.stringify(raw));
     }
-};
-
-MqttTarget.prototype.publish = function (data) {
-    var length = data.length,
-        buffer = new ArrayBuffer(3),
-        dataView = new DataView(buffer);
-    dataView.setUint8(0, 3); // type 3
-    dataView.setUint16(1, length);
-    var header = E.toString(buffer);
-    this.mqtt.publish(this.topic, header + data);
-    console.log('Published data: ' + data + ' to topic: ' + this.topic);
 };
 
 MqttTarget.prototype.stop = function () {};

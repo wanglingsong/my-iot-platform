@@ -15,7 +15,9 @@ Dht11Source.prototype.read = function (callback) {
             p.dht.read(function (a) {
                 console.log("Reading: " + JSON.stringify(a));
                 if (!a.err) {
-                    callback('{"temp":' + (a.temp + p.tofs) + ',"rh":' + (a.rh + p.hofs) + '}');
+                    a.temp += p.tofs;
+                    a.rh += p.hofs;
+                    callback(a, 'dht11');
                 } else {
                     console.log("Invalid reading: " + JSON.stringify(a));
                 };

@@ -6,7 +6,7 @@ function GpioTarget(opt, wtc) {
 
 GpioTarget.prototype.write = function (data) {
 	// TODO parse
-	digitalWrite(this.pin, data === 'true');
+	digitalWrite(this.pin, (data === 'true' || data === '1'));
 };
 
 GpioTarget.prototype.stop = function () {};

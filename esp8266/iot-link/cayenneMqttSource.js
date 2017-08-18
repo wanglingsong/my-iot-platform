@@ -18,7 +18,7 @@ MqttSource.prototype.read = function (callback) {
     console.log('Subscribed to topic: ' + this.topic);
     this.mqtt.on('message', function (msg) {
         console.log('Received message: ' + msg.message);
-        callback(msg.message, 'mqtt-sub');
+        callback(msg.message.split(',')[1], 'mqtt-sub');
     });
 };
 
