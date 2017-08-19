@@ -1,11 +1,11 @@
-function HCSR501Source(opt, wtc) {
+function GpioSource(opt, wtc) {
     this.pin = opt.pin;
     this.wid = null;
     wtc.emit('source', this);
     console.log('HCSR501 source created');
 }
 
-HCSR501Source.prototype.read = function (callback) {
+GpioSource.prototype.read = function (callback) {
     if (this.wid === null) {
         this.wid = setWatch(function (e) {
             console.log("Movement detected: " + e.state + " at " + e.time);
@@ -18,7 +18,7 @@ HCSR501Source.prototype.read = function (callback) {
     }
 };
 
-HCSR501Source.prototype.stop = function () {
+GpioSource.prototype.stop = function () {
     if (this.wid !== null) {
         console.log('stop watching');
         clearWatch(this.wid);
@@ -27,5 +27,5 @@ HCSR501Source.prototype.stop = function () {
 };
 
 exports.createSource = function (opt, wtc) {
-    return new HCSR501Source(opt, wtc);
+    return new GpioSource(opt, wtc);
 };

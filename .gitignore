@@ -4,3 +4,4 @@ kairosdb/kairos-beanstalk/target
 *.iml
 esp8266/node_modules
 esp8266/dist
+esp8266/iot-link/modules/
