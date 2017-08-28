@@ -16,7 +16,7 @@ function MqttTarget(opt, wtc, tspt) {
 MqttTarget.prototype.write = function (raw, type) {
     if (type === 'dht11') {
         this.publish('{"temp": ' + raw.temp + ',"rh":' + raw.rh + '}');
-    } else if (type === 'hcsr501') {
+    } else if (type === 'gpio') {
         this.publish('{"motion": ' + raw.state + '}');
     } else {
         this.publish(JSON.stringify(raw));

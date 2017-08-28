@@ -9,7 +9,7 @@ GpioSource.prototype.read = function (callback) {
     if (this.wid === null) {
         this.wid = setWatch(function (e) {
             console.log("Movement detected: " + e.state + " at " + e.time);
-            callback(e, 'hcsr501');
+            callback(e, 'gpio');
         }, this.pin, {
             repeat: true,
             edge: "both"
