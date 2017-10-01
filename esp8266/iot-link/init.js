@@ -12,7 +12,7 @@ function setupLinks(tspt, lnkConfig) {
         w.s.read(function (data, type) {
             w.t.write(data, type);
         });
-        console.log('linked');
+        //console.log('linked');
     }
 
     function delink(w) {
@@ -22,7 +22,7 @@ function setupLinks(tspt, lnkConfig) {
         if (w.t) {
             w.t.stop();
         }
-        console.log('delinked');
+        //console.log('delinked');
     }
 
     var watchers = [];
@@ -32,7 +32,7 @@ function setupLinks(tspt, lnkConfig) {
         var w = {};
 
         w.on('source', function (s) {
-            console.log('on source ' + s);
+            //console.log('on source ' + s);
             if (s && !w.s && w.t) {
                 w.s = s;
                 link(w);
@@ -45,7 +45,7 @@ function setupLinks(tspt, lnkConfig) {
         });
 
         w.on('target', function (t) {
-            console.log('on target ' + t);
+            //console.log('on target ' + t);
             if (t && w.s && !w.t) {
                 w.t = t;
                 link(w);
@@ -73,17 +73,20 @@ exports.initEspruino = function (config) {
     var watchers = setupLinks(tspt, config.links);
     var wifi = require('Wifi');
 
-    wifi.on('connected', function (details) {
-        console.log("connected: detail=", details);
-        Object.keys(tspt).forEach(function (k) {
-            tspt[k].connect(true);
-        });
-    });
+    //wifi.on('connected', function (details) {
+        //console.log("connected: detail=", details);
+        // Object.keys(tspt).forEach(function (k) {
+        //     tspt[k].connect(true);
+        // });
+    //});
 
     wifi.connect(config.network.ssid, {
         password: config.network.password
     }, function (err) {
         console.log("connected? err=", err, "info=", wifi.getIP());
+        Object.keys(tspt).forEach(function (k) {
+            tspt[k].connect(true);
+        });
     });
 
     wifi.stopAP();

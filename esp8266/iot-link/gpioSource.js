@@ -1,28 +1,27 @@
 function GpioSource(opt, wtc) {
     this.pin = opt.pin;
-    this.wid = null;
     wtc.emit('source', this);
-    console.log('HCSR501 source created');
+    //console.log('GPIO source created');
 }
 
 GpioSource.prototype.read = function (callback) {
-    if (this.wid === null) {
+    if (!this.wid) {
         this.wid = setWatch(function (e) {
-            console.log("Movement detected: " + e.state + " at " + e.time);
+            //console.log("Movement detected: " + e.state + " at " + e.time);
             callback(e, 'gpio');
         }, this.pin, {
             repeat: true,
             edge: "both"
         });
-        console.log('Start watching');
+        //console.log('Start watching');
     }
 };
 
 GpioSource.prototype.stop = function () {
-    if (this.wid !== null) {
-        console.log('stop watching');
+    if (this.wid) {
+        //console.log('stop watching');
         clearWatch(this.wid);
-        this.wid = null;
+        delete this.wid;
     }
 };
 

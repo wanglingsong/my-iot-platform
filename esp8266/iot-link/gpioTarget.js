@@ -1,7 +1,7 @@
 function GpioTarget(opt, wtc) {
 	this.pin = opt.pin;
 	wtc.emit('target', this);
-	console.log('GPIO target created');
+	//console.log('GPIO target created');
 }
 
 GpioTarget.prototype.write = function (data) {

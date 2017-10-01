@@ -1,28 +1,27 @@
 function MqttTransport(opt) {
     this.opt = opt;
-    this.client = null;
-    this.custOpt = null;
+    this.mqtt = require("mqtt");
 }
 
 MqttTransport.prototype.connect = function (connect) {
     if (connect) {
-        this.client.connect(this.custOpt);
+        this.mqtt.connect(this.custOpt);
     } else {
-        this.client.disconnect();
+        this.mqtt.disconnect();
     }
 };
 
 MqttTransport.prototype.createClient = function (options) {
 
-    var mqttOpt = this.opt;
+    var mqttOpt = this.opt,
+        mqtt = this.mqtt;
     if (options) {
         mqttOpt = this.opt.clone();
         Object.keys(options).forEach(function (k) {
             mqttOpt[k] = options[k];
         });
     }
-    if (this.client === null) {
-        var mqtt = require("mqtt");
+    if (!this.custOpt) {
         this.custOpt = {
             host: mqttOpt.host,
             clientid: mqttOpt.client_id || getSerial(),
@@ -32,15 +31,14 @@ MqttTransport.prototype.createClient = function (options) {
         };
         if (mqttOpt.auto_reconnect) {
             mqtt.on('disconnect', function () {
-                console.log("Reconnect to MQTT");
-                mqtt.connect();
+                //console.log("Reconnect to MQTT");
+                mqtt.connect(this.custOpt);
             });
         }
 
-        this.client = mqtt;
-        console.log('mqtt client created with options: ' + JSON.stringify(mqttOpt));
+        //console.log('mqtt client created with options: ' + JSON.stringify(mqttOpt));
     }
-    return this.client;
+    return mqtt;
 
 };
 

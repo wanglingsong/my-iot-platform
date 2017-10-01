@@ -2,20 +2,22 @@ function MqttSource(opt, wtc, tspt) {
     this.mqtt = tspt.createClient(opt.transportOptions);
     this.topic = opt.topic;
     var p = this;
-    this.mqtt.on('connected', function () {
-        console.log('mqtt source ready');
+    this.mqtt.on('connect', function () {
+        //console.log('mqtt source ready');
         wtc.emit('source', p);
     });
-    this.mqtt.on('disconnected', function () {
-        console.log('mqtt source not ready');
+    this.mqtt.on('disconnect', function () {
+        //console.log('mqtt source not ready');
         wtc.emit('source', null);
     });
-    console.log('MQTT Source created');
+    //console.log('MQTT Source created');
 }
 
 MqttSource.prototype.read = function (callback) {
-    this.mqtt.subscribe(this.topic);
-    console.log('Subscribed to topic: ' + this.topic);
+    this.mqtt.subscribe({
+        topic: this.topic
+    });
+    //console.log('Subscribed to topic: ' + this.topic);
     this.mqtt.on('message', function (msg) {
         console.log('Received message: ' + msg.message);
         callback(msg.message.split(',')[1], 'mqtt-sub');
